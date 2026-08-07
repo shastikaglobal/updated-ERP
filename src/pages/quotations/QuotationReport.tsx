@@ -19,13 +19,11 @@ export default function QuotationReport() {
       try {
         
 
-        const qRes = await apiFetch(`/api/quotations/${id}`, { headers: { Authorization: `Bearer ${session?.access_token }` }
-      });
+        const qRes = await apiFetch(`/api/quotations/${id}`, {});
         if (!qRes.ok) throw new Error("Failed to load quotation");
         const quotationData = await qRes.json();
 
-        const itemsRes = await apiFetch(`/api/quotations/${id}/items`, { headers: { Authorization: `Bearer ${session?.access_token }` }
-      });
+        const itemsRes = await apiFetch(`/api/quotations/${id}/items`, {});
         if (!itemsRes.ok) throw new Error("Failed to load quotation items");
         const items = await itemsRes.json();
 

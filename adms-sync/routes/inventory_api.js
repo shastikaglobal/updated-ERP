@@ -350,4 +350,32 @@ router.put('/warehouse_stock/:id', requireAuth, async (req, res) => {
   } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
+// GET /api/inventory/export_containers/with-shipments — joined read for Container Loading
+router.get('/export_containers/with-shipments', requireAuth, async (req, res) => {
+  try {
+    let query = `
+      SELECT ec.*,
+        es.shipment_number,
+        es.origin_port,
+        es.destination_port
+      FROM export_containers ec
+      LEFT JOIN export_shipments es ON ec.shipment_id = es.id
+      ORDER BY ec.created_at DESC
+    `;
+    const { rows } = await db.query(query);
+    const mapped = rows.map(r => ({
+      ...r,
+      export_shipments: { 
+        shipment_number: r.shipment_number, 
+        origin_port: r.origin_port, 
+        destination_port: r.destination_port 
+      }
+    }));
+    res.json(mapped);
+  } catch (err) {
+    console.error('Error GET export_containers/with-shipments:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

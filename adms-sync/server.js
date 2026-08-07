@@ -1695,7 +1695,7 @@ const ALLOWED_FALLBACK_TABLES = new Set([
   'user_roles', 'roles', 'permissions', 'role_permissions', 'active_sessions',
   'quotations', 'leads', 'tasks', 'follow_ups', 'customers', 'products',
   'inventory', 'warehouse', 'dispatch', 'invoices', 'emails', 'farmers',
-  'procurement', 'purchase_orders', 'documents'
+  'procurement', 'purchase_orders', 'documents', 'export_certificates', 'export_containers', 'export_shipments'
 ]);
 
 app.post('/api/vps-fallback', require('./middleware/auth').requireAuth, async (req, res) => {

@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchableInput } from "@/components/ui/SearchableInput";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from "@/components/ui/select";
@@ -594,21 +595,16 @@ export default function AvailableStock() {
 
             <div className="space-y-2">
               <Label>Warehouse</Label>
-              <div className="flex flex-col gap-2">
-                <Input
+              <SearchableInput
                   placeholder="Type or select warehouse..."
                   value={editForm.warehouse_id}
-                  onChange={(e) => setEditForm(p => ({ ...p, warehouse_id: e.target.value }))}
-                  list="avail-warehouse-options"
+                  onChange={(val) => setEditForm(p => ({ ...p, warehouse_id: val }))}
+                  options={warehouses.map((w: any) => ({
+                    id: w.id,
+                    name: w.name,
+                    description: [w.location, w.city].filter(Boolean).join(", ")
+                  }))}
                 />
-                <datalist id="avail-warehouse-options">
-                  {warehouses.map((w: any) => (
-                    <option key={w.id} value={w.name}>
-                      {[w.location, w.city].filter(Boolean).join(", ")}
-                    </option>
-                  ))}
-                </datalist>
-              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

@@ -24,7 +24,7 @@ const tabs = [
 const SUPER_ADMIN_EMAIL = "shastikaglobal11@gmail.com";
 
 export default function AccountSettings() {
-  const { profile, user, roleSlugs, refresh } = useAuth();
+  const { profile, user, roleSlugs, refresh, session } = useAuth();
   const isAdmin = Array.from(roleSlugs).map(s => s.toLowerCase()).includes("admin");
   const canChangePassword = profile?.email === SUPER_ADMIN_EMAIL || user?.email === SUPER_ADMIN_EMAIL;
   const [activeTab, setActiveTab] = useState('profile');

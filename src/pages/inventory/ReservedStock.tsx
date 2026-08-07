@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchableInput } from "@/components/ui/SearchableInput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -625,21 +626,16 @@ export default function ReservedStock() {
 
               <div className="space-y-2">
                 <Label>Warehouse</Label>
-                <div className="flex flex-col gap-2">
-                  <Input
+                <SearchableInput
                     placeholder="Type or select warehouse..."
                     value={formState.warehouse_id}
-                    onChange={(e) => setFormState((prev) => ({ ...prev, warehouse_id: e.target.value }))}
-                    list="warehouse-options"
+                    onChange={(val) => setFormState((prev) => ({ ...prev, warehouse_id: val }))}
+                    options={warehouses.map((w: any) => ({
+                      id: w.id,
+                      name: w.name,
+                      description: [w.location, w.city].filter(Boolean).join(", ")
+                    }))}
                   />
-                  <datalist id="warehouse-options">
-                    {warehouses.map((warehouse: any) => (
-                      <option key={warehouse.id} value={warehouse.name}>
-                        {[warehouse.location, warehouse.city].filter(Boolean).join(", ")}
-                      </option>
-                    ))}
-                  </datalist>
-                </div>
               </div>
             </div>
 

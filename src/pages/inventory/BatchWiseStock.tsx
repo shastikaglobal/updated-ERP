@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchableInput } from "@/components/ui/SearchableInput";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -495,23 +496,16 @@ export default function BatchWiseStock() {
               </div>
               <div className="space-y-2">
                 <Label>Name and Location</Label>
-                <Select
-                  value={formState.warehouse}
-                  onValueChange={(val) => setFormState((prev) => ({ ...prev, warehouse: val }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Name and Location" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {warehouses.length === 0 ? (
-                      <div className="p-2 text-sm text-muted-foreground">No warehouses available</div>
-                    ) : (
-                      warehouses.map((w: any) => (
-                        <SelectItem key={w.id} value={w.id}>{w.name}{[w.location, w.city].filter(Boolean).length ? " - " + [w.location, w.city].filter(Boolean).join(", ") : ""}</SelectItem>
-                      ))
-                    )}
-                  </SelectContent>
-                </Select>
+                <SearchableInput
+                    placeholder="Type or select warehouse..."
+                    value={formState.warehouse}
+                    onChange={(val) => setFormState((prev) => ({ ...prev, warehouse: val }))}
+                    options={warehouses.map((w: any) => ({
+                      id: w.id,
+                      name: w.name,
+                      description: [w.location, w.city].filter(Boolean).join(", ")
+                    }))}
+                  />
               </div>
             </div>
 

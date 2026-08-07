@@ -235,6 +235,12 @@ export default function CreateShipment() {
       // Calculate weight per container
       const totalWeight = Number(selectedOrder?.quantity) || 0;
       const count = parseInt(containerCount) || 1;
+      
+      if (count > 50) {
+        setSaving(false);
+        return toast.error('Maximum 50 containers allowed per shipment. Please check the container count input.');
+      }
+      
       const weightPerContainer = totalWeight / count;
 
       // Insert shipment
@@ -277,7 +283,7 @@ export default function CreateShipment() {
       if (!contRes.ok) throw new Error(await contRes.text() || "Failed to create containers");
 
       // Auto-generate a tracking entry (cargo/barcode) for this shipment
-      const bRes = await apiFetch('/api/barcodes', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ batch_number: b.batch_number, barcode_data: b.batch_number, created_by: profile?.id }) });
+      const bRes = await apiFetch('/api/barcodes', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ batch_number: shipmentNumber, barcode_data: shipmentNumber, created_by: profile?.id }) });
       const barcodeError = bRes.ok ? null : new Error('Failed');
       
       if (barcodeError) {
