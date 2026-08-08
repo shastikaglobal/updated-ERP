@@ -182,19 +182,36 @@ export default function PaymentsRegister() {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label>Link to Export Order (Optional)</Label>
-                  <Select value={orderId || "none"} onValueChange={(val) => val === "none" ? setOrderId(null) : handleOrderSelect(val)}>
-                    <SelectTrigger className="bg-white/5">
-                      <SelectValue placeholder="Select an unpaid order" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-card">
-                      <SelectItem value="none">Manual Entry (No Order)</SelectItem>
-                      {unpaidOrders.map(o => (
-                        <SelectItem key={o.id} value={o.id}>
-                          {o.order_number} — {o.customer_name} ({o.currency} {o.total_amount})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    placeholder="Select or enter order ID (Leave blank for manual entry)"
+                    value={orderId || ""}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (!val || val === "none") {
+                        setOrderId(null);
+                      } else {
+                        setOrderId(val);
+                        const order = unpaidOrders.find((o) => o.id === val || o.order_number === val);
+                        if (order) {
+                          setOrderId(order.id);
+                          setPartyName(order.customer_name);
+                          setAmount(order.total_amount.toString());
+                          setCurrency(order.currency);
+                          setRef(order.order_number);
+                        }
+                      }
+                    }}
+                    list="export-orders-list"
+                    className="bg-white/5"
+                  />
+                  <datalist id="export-orders-list">
+                    <option value="none">Manual Entry (No Order)</option>
+                    {unpaidOrders.map(o => (
+                      <option key={o.id} value={o.id}>
+                        {o.order_number} — {o.customer_name} ({o.currency} {o.total_amount})
+                      </option>
+                    ))}
+                  </datalist>
                 </div>
 
                 <div className="space-y-2">
@@ -208,17 +225,19 @@ export default function PaymentsRegister() {
                   </div>
                   <div className="space-y-2">
                     <Label>Currency</Label>
-                    <Select value={currency} onValueChange={setCurrency}>
-                      <SelectTrigger className="bg-white/5">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-card">
-                        <SelectItem value="USD">USD ($)</SelectItem>
-                        <SelectItem value="INR">INR (₹)</SelectItem>
-                        <SelectItem value="EUR">EUR (€)</SelectItem>
-                        <SelectItem value="AED">AED (د.إ)</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Input 
+                      placeholder="e.g. USD, EUR" 
+                      value={currency} 
+                      onChange={(e) => setCurrency(e.target.value.toUpperCase())} 
+                      list="currency-list" 
+                      className="bg-white/5 uppercase" 
+                      maxLength={3}
+                    />
+                    <datalist id="currency-list">
+                      {["USD", "EUR", "GBP", "JPY", "INR", "AUD", "CAD", "CHF", "CNY", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYN", "BZD", "CDF", "CLP", "COP", "CRC", "CUP", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ERN", "ETB", "FJD", "FKP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HRK", "HTG", "HUF", "IDR", "ILS", "IQD", "IRR", "ISK", "JMD", "JOD", "KES", "KGS", "KHR", "KMF", "KPW", "KRW", "KWD", "KYD", "KZT", "LAK", "LBP", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RUB", "RWF", "SAR", "SBD", "SCR", "SDG", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STN", "SVC", "SYP", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL"].map(c => (
+                        <option key={c} value={c} />
+                      ))}
+                    </datalist>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
