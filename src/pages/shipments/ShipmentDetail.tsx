@@ -137,7 +137,7 @@ export default function ShipmentDetail() {
       }
       return shipmentData as Shipment;
     },
-    enabled: !!id
+    enabled: !!id, retry: false
       });
 
   /* ── Containers ── */
@@ -149,7 +149,7 @@ export default function ShipmentDetail() {
       const data = await res.json();
       return (data ?? []) as Container[];
     },
-    enabled: !!id
+    enabled: !!id, retry: false
       });
 
   /* ── Linked barcodes ── */
