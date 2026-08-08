@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api";
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, useMemo, ReactNode } from "react";
 
 export type User = { id: string; email: string; user_metadata?: any };
 export type Session = { user: User; access_token?: string };
@@ -172,8 +172,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     window.location.href = "/auth";
   };
 
+  const contextValue = useMemo(() => ({
+    session, user: session?.user ?? null, profile, permissions, roleSlugs, loading, onlineUsers, activeMinutes, idleMinutes, signOut, refresh, updateSessionState
+  }), [session, profile, permissions, roleSlugs, loading, onlineUsers, activeMinutes, idleMinutes]);
+
   return (
-    <Ctx.Provider value={{ session, user: session?.user ?? null, profile, permissions, roleSlugs, loading, onlineUsers, activeMinutes, idleMinutes, signOut, refresh, updateSessionState }}>
+    <Ctx.Provider value={contextValue}>
       {children}
     </Ctx.Provider>
   );

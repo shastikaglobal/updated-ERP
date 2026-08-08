@@ -21,8 +21,9 @@ const statusMap: Record<string, Tone> = {
   cold: "muted", inactive: "muted", closed: "muted",
 };
 
-export function StatusBadge({ status, tone }: { status: string; tone?: Tone }) {
-  const t = tone ?? statusMap[status.toLowerCase()] ?? "muted";
+export function StatusBadge({ status, tone }: { status?: string | null; tone?: Tone }) {
+  const safeStatus = status || "—";
+  const t = tone ?? statusMap[safeStatus.toLowerCase()] ?? "muted";
   return (
     <span
       className={cn(
@@ -31,7 +32,7 @@ export function StatusBadge({ status, tone }: { status: string; tone?: Tone }) {
       )}
     >
       <span className={cn("h-1.5 w-1.5 rounded-full", `bg-${t === "muted" ? "muted-foreground" : t}`)} />
-      {status}
+      {safeStatus}
     </span>
   );
 }

@@ -177,7 +177,7 @@ const ZohoIntegration = lazy(() => import("./pages/system/ZohoIntegration"));
 const Mailbox = lazy(() => import("./pages/system/Mailbox"));
 const TallyIndex = lazy(() => import("./pages/Tally/index"));
 const JournalEntry = lazy(() => import("./pages/Tally/JournalEntry"));
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false, refetchOnWindowFocus: false } } });
 
 const DashboardRedirect = () => {
   const { roleSlugs, profile } = useAuth();

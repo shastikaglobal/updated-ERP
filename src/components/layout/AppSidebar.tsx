@@ -168,13 +168,13 @@ const { data: profile } = {} as any; // [VPS Migration] fixed assignment
       if (mounted) {
         fetchPerms();
       }
-    }, 5000);
+    }, 60000);
 
     return () => {
       mounted = false;
       clearInterval(interval);
     };
-  }, [currentUserId, profile?.email, isAdmin, session?.access_token]);
+  }, [currentUserId]);
 
   const activeIsAdmin = isAdmin || employeeAdmin;
 
